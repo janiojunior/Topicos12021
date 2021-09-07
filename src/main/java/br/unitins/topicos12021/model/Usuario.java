@@ -1,21 +1,35 @@
 package br.unitins.topicos12021.model;
 
-public class Usuario {
+import java.util.Objects;
+
+public class Usuario implements Cloneable {
+	private Integer id;
 	private String nome;
 	private String cpf;
 	private String email;
 	private String senha;
-	
+
 	public Usuario() {
-		
+
 	}
 
-	public Usuario(String nome, String cpf, String email, String senha) {
+	public Usuario(Integer id, String nome, String cpf, String email, String senha) {
 		super();
+		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.email = email;
 		this.senha = senha;
+	}
+
+	public Usuario getClone() {
+		try {
+			return (Usuario) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	public String getNome() {
@@ -50,9 +64,36 @@ public class Usuario {
 		this.senha = senha;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		return "Usuario [nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", senha=" + senha + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		return Objects.equals(id, other.id);
+	}
+	
+	
 
 }

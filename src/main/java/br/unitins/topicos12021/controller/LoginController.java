@@ -15,9 +15,9 @@ public class LoginController {
 		System.out.println(getUsuario());
 		System.out.println(getSenha());
 		
-		if (getUsuario().equals("janio") && getSenha().equals("123")) {
+		if (getUsuario().equals("janio@gmail.com") && getSenha().equals("123")) {
 //			return "hello.xhtml";
-			return "hello.xhtml?faces-redirect=true";
+			return "usuario.xhtml?faces-redirect=true";
 		}
 		return null;
 	}

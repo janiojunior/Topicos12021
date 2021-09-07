@@ -8,22 +8,45 @@
 </h:head>
 
 <h:body>
+	<h:messages style="color:red;margin:8px;" />
 	<h:form>
 		<h1>Cadastro de Usuário</h1>
 		<h:panelGrid columns="2">
 			<h:outputLabel value="Nome: " />
 			<h:inputText value="#{usuarioController.usuario.nome}" />
 			<h:outputLabel value="Cpf: " />
-			<h:inputText value="#{usuarioController.usuario.cpf}" />
+			<h:inputText value="#{usuarioController.usuario.cpf}" 
+				required="true" requiredMessage="O cpf deve ser informado." />
 			<h:outputLabel value="Email: " />
 			<h:inputText value="#{usuarioController.usuario.email}" />
 			<h:outputLabel value="Senha: " />
 			<h:inputSecret value="#{usuarioController.usuario.senha}" />
-			<h:commandButton action="#{usuarioController.incluir}" value="Inclui" />
-			<h:commandButton action="#{usuarioController.limpar}" value="Limpar" />
-		</h:panelGrid>
-
+			
+			</h:panelGrid>
+				<h:panelGrid columns="4">
+				<h:commandButton actionListener="#{usuarioController.incluir}" 
+					value="Incluir"
+					disabled="#{usuarioController.usuario.id != null}" />
+				<h:commandButton actionListener="#{usuarioController.alterar}" 
+					value="Alterar" 
+					disabled="#{usuarioController.usuario.id == null}" />
+			</h:panelGrid>
+		</h:form>	
+		<h:form>
+			<h:panelGrid columns="4">
+				<h:commandButton actionListener="#{usuarioController.excluir}" 
+					value="Excluir" 
+					disabled="#{usuarioController.usuario.id == null}" />
+				<h:commandButton actionListener="#{usuarioController.limpar}" value="Limpar" />		
+			</h:panelGrid>
+		</h:form>
+	<h:form>
 		<h:dataTable value="#{usuarioController.listaUsuario}" var="obj">
+			<h:column>
+				<f:facet name="header">Id</f:facet>
+				<h:outputLabel value="#{obj.id}" />
+			</h:column>
+			
 			<h:column>
 				<f:facet name="header">CPF</f:facet>
 				<h:outputLabel value="#{obj.cpf}" />
@@ -43,10 +66,21 @@
 				<f:facet name="header">Senha</f:facet>
 				<h:outputLabel value="#{obj.senha}" />
 			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Ação</f:facet>
+				<h:panelGrid columns="2">
+					<h:commandButton value="Editar"
+						actionListener="#{usuarioController.editar(obj)}"/>
+					<h:commandButton value="Excluir"
+						actionListener="#{usuarioController.excluir(obj)}"/>
+				</h:panelGrid>
+				
+			</h:column>
 
 		</h:dataTable>
-
 	</h:form>
+
 </h:body>
 
 </html>
