@@ -29,14 +29,20 @@ public class UsuarioController implements Serializable {
 		this.usuario = usuario;
 	}
 	
+	public void validarNome() {
+		if (getUsuario().getNome() == null || getUsuario().getNome().trim().equals("")) {
+			Util.addMessage("O nome deve ser informado.");
+		}
+	}
+	
 	public boolean validarCampos() {
 		boolean retorno = true;
 		
-		if (getUsuario().getNome().trim().equals("")) {
+		if (getUsuario().getNome() == null || getUsuario().getNome().trim().equals("")) {
 			Util.addMessage("O nome deve ser informado.");
 			retorno = false;
 		}
-		if (getUsuario().getSenha().trim().equals("")) {
+		if (getUsuario().getSenha() == null || getUsuario().getSenha().trim().equals("")) {
 			Util.addMessage("A senha deve ser informada.");
 			retorno = false;
 		}

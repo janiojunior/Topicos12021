@@ -8,77 +8,86 @@
 </h:head>
 
 <h:body>
-	<h:messages style="color:red;margin:8px;" />
-	<h:form>
+	<h:form >
+		<h:messages id="messages" style="color:red;margin:8px;" />
 		<h1>Cadastro de Usuário</h1>
-		<h:panelGrid columns="2">
+		<h:panelGrid id="panelPrincipal" columns="2">
 			<h:outputLabel value="Nome: " />
-			<h:inputText value="#{usuarioController.usuario.nome}" />
+			<h:inputText value="#{usuarioController.usuario.nome}">
+				<f:ajax event="mouseover" 
+						execute="@this" 
+						render="@this messages" 
+						listener="#{usuarioController.validarNome}"/>
+			</h:inputText>
 			<h:outputLabel value="Cpf: " />
-			<h:inputText value="#{usuarioController.usuario.cpf}" 
-				required="true" requiredMessage="O cpf deve ser informado." />
+			<h:inputText value="#{usuarioController.usuario.cpf}" required="true"
+				requiredMessage="O cpf deve ser informado." />
 			<h:outputLabel value="Email: " />
 			<h:inputText value="#{usuarioController.usuario.email}" />
 			<h:outputLabel value="Senha: " />
-			<h:inputSecret value="#{usuarioController.usuario.senha}" />
-			
-			</h:panelGrid>
-				<h:panelGrid columns="4">
-				<h:commandButton actionListener="#{usuarioController.incluir}" 
-					value="Incluir"
-					disabled="#{usuarioController.usuario.id != null}" />
-				<h:commandButton actionListener="#{usuarioController.alterar}" 
-					value="Alterar" 
-					disabled="#{usuarioController.usuario.id == null}" />
-			</h:panelGrid>
-		</h:form>	
-		<h:form>
-			<h:panelGrid columns="4">
-				<h:commandButton actionListener="#{usuarioController.excluir}" 
-					value="Excluir" 
-					disabled="#{usuarioController.usuario.id == null}" />
-				<h:commandButton actionListener="#{usuarioController.limpar}" value="Limpar" />		
-			</h:panelGrid>
-		</h:form>
-	<h:form>
-		<h:dataTable value="#{usuarioController.listaUsuario}" var="obj">
-			<h:column>
-				<f:facet name="header">Id</f:facet>
-				<h:outputLabel value="#{obj.id}" />
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">CPF</f:facet>
-				<h:outputLabel value="#{obj.cpf}" />
-			</h:column>
+			<h:inputSecret value="#{usuarioController.usuario.senha}"/>
 
-			<h:column>
-				<f:facet name="header">Nome</f:facet>
-				<h:outputLabel value="#{obj.nome}" />
-			</h:column>
 
-			<h:column>
-				<f:facet name="header">Email</f:facet>
-				<h:outputLabel value="#{obj.email}" />
-			</h:column>
+		</h:panelGrid>
+		<h:panelGrid id="panelBotoes" columns="4">
+			<h:commandButton actionListener="#{usuarioController.incluir}"
+				value="Incluir" disabled="#{usuarioController.usuario.id != null}">
+				<f:ajax execute="panelPrincipal" render="@form" />
+			</h:commandButton>
+			<h:commandButton actionListener="#{usuarioController.alterar}"
+				value="Alterar" disabled="#{usuarioController.usuario.id == null}" />
+			<h:commandButton actionListener="#{usuarioController.excluir}"
+				value="Excluir" disabled="#{usuarioController.usuario.id == null}" />
+			<h:commandButton actionListener="#{usuarioController.limpar}"
+				value="Limpar">
+				<f:ajax execute="@this" render="panelPrincipal panelBotoes" />
+			</h:commandButton>
+		</h:panelGrid>
 
-			<h:column>
-				<f:facet name="header">Senha</f:facet>
-				<h:outputLabel value="#{obj.senha}" />
-			</h:column>
-			
-			<h:column>
-				<f:facet name="header">Ação</f:facet>
-				<h:panelGrid columns="2">
-					<h:commandButton value="Editar"
-						actionListener="#{usuarioController.editar(obj)}"/>
-					<h:commandButton value="Excluir"
-						actionListener="#{usuarioController.excluir(obj)}"/>
-				</h:panelGrid>
-				
-			</h:column>
-
-		</h:dataTable>
+		<h:panelGrid id="panelDataTable">
+			<h:dataTable id="dataTable" value="#{usuarioController.listaUsuario}" var="obj">
+				<h:column>
+					<f:facet name="header">Id</f:facet>
+					<h:outputLabel value="#{obj.id}" />
+				</h:column>
+	
+				<h:column>
+					<f:facet name="header">CPF</f:facet>
+					<h:outputLabel value="#{obj.cpf}" />
+				</h:column>
+	
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+					<h:outputLabel value="#{obj.nome}" />
+				</h:column>
+	
+				<h:column>
+					<f:facet name="header">Email</f:facet>
+					<h:outputLabel value="#{obj.email}" />
+				</h:column>
+	
+				<h:column>
+					<f:facet name="header">Senha</f:facet>
+					<h:outputLabel value="#{obj.senha}" />
+				</h:column>
+	
+				<h:column>
+					<f:facet name="header">Ação</f:facet>
+					<h:panelGrid columns="2">
+						<h:commandButton value="Editar"
+							actionListener="#{usuarioController.editar(obj)}" >
+							<f:ajax execute="@this" render="@form:panelPrincipal @form:panelBotoes" />
+						</h:commandButton>
+						<h:commandButton value="Excluir"
+							actionListener="#{usuarioController.excluir(obj)}">
+							<f:ajax execute="@this" render="@form:panelDataTable" />
+						</h:commandButton>
+					</h:panelGrid>
+	
+				</h:column>
+	
+			</h:dataTable>
+		</h:panelGrid>
 	</h:form>
 
 </h:body>
