@@ -2,28 +2,73 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:jsf="http://xmlns.jcp.org/jsf">
 
 <h:head>
 </h:head>
 
 <h:body>
 	<h:form >
-		<h:messages id="messages" style="color:red;margin:8px;" />
+		<h:messages 
+			id="messages" 
+			errorStyle="color:red;margin:8px;"
+			warnStyle="color:yellow;margin:8px;"
+			infoStyle="color:green;margin:8px;"
+			/>
 		<h1>Cadastro de Usuário</h1>
 		<h:panelGrid id="panelPrincipal" columns="2">
 			<h:outputLabel value="Nome: " />
 			<h:inputText value="#{usuarioController.usuario.nome}">
-				<f:ajax event="mouseover" 
-						execute="@this" 
-						render="@this messages" 
-						listener="#{usuarioController.validarNome}"/>
+				
 			</h:inputText>
 			<h:outputLabel value="Cpf: " />
-			<h:inputText value="#{usuarioController.usuario.cpf}" required="true"
-				requiredMessage="O cpf deve ser informado." />
+			<h:inputText value="#{usuarioController.usuario.cpf}" 
+				immediate="true"
+				required="true"
+				requiredMessage="O cpf deve ser informado." 
+				validatorMessage="Informe o cpf nos seguintes padrões: 111.111.111-11 ou 11111111111" >
+				<f:validateRegex pattern="([0-9]{3}[.][0-9]{3}[.][0-9]{3}[-][0-9]{2})|([0-9]{11})" />
+				<f:validateLength minimum="1" maximum="11" />
+			</h:inputText>
+			
+			<h:outputLabel value="Data de Nascimento: " />
+			<input 
+				type="date"
+				placeholder="dd/MM/aaaa"
+				jsf:value="#{usuarioController.usuario.dataNascimento}" 
+				pattern="yyyy-MM-dd">
+				<f:convertDateTime type="localDate" pattern="yyyy-MM-dd"/>
+			</input>
+				
+			<h:outputLabel value="Perfil: " />
+			<h:selectOneMenu value="#{usuarioController.usuario.perfil}">
+				<f:selectItem 
+					itemLabel="Selecione um perfil ...." />
+				<f:selectItems 
+					var="obj"
+					value="#{usuarioController.listaPerfil}"
+					itemLabel="#{obj.label}"/>
+			</h:selectOneMenu>
+			
+			<h:outputLabel value="Sexo: " />
+			<h:selectOneRadio value="#{usuarioController.usuario.sexo}" >
+				<f:selectItems 
+					var="obj"
+					value="#{usuarioController.listaSexo}"
+					itemLabel="#{obj.label}"/>
+			</h:selectOneRadio>
+				
 			<h:outputLabel value="Email: " />
 			<h:inputText value="#{usuarioController.usuario.email}" />
+				
+			<h:outputLabel value="Telefone - Codigo Area: " />
+			<h:inputText value="#{usuarioController.usuario.telefone.codigoArea}" />
+				
+			<h:outputLabel value="Telefone - Numero: " />
+			<h:inputText value="#{usuarioController.usuario.telefone.numero}" />
+			
 			<h:outputLabel value="Senha: " />
 			<h:inputSecret value="#{usuarioController.usuario.senha}"/>
 
@@ -55,10 +100,27 @@
 					<f:facet name="header">CPF</f:facet>
 					<h:outputLabel value="#{obj.cpf}" />
 				</h:column>
-	
+				
+				<h:column>
+					<f:facet name="header">Data de Nascimento</f:facet>
+					<h:outputLabel value="#{obj.dataNascimento}" >
+						<f:convertDateTime type="localDate" pattern="MM/yyyy"/>
+					</h:outputLabel>
+				</h:column>
+				
 				<h:column>
 					<f:facet name="header">Nome</f:facet>
 					<h:outputLabel value="#{obj.nome}" />
+				</h:column>
+					
+				<h:column>
+					<f:facet name="header">Perfil</f:facet>
+					<h:outputLabel value="#{obj.perfil.label}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">Sexo</f:facet>
+					<h:outputLabel value="#{obj.sexo.label}" />
 				</h:column>
 	
 				<h:column>

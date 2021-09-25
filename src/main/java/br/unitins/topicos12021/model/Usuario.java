@@ -1,13 +1,26 @@
 package br.unitins.topicos12021.model;
 
+import java.time.LocalDate;
 import java.util.Objects;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
+
 
 public class Usuario implements Cloneable {
 	private Integer id;
 	private String nome;
 	private String cpf;
+	@Past(message = "Informe uma data anterior ao dia de hoje.")
+	private LocalDate dataNascimento;
+	@Email(message = "Email com formato inválido.")
+	@NotBlank(message = "O email deve ser informado")
 	private String email;
 	private String senha;
+	private Perfil perfil;
+	private Sexo sexo;
+	private Telefone telefone;
 
 	public Usuario() {
 
@@ -20,6 +33,7 @@ public class Usuario implements Cloneable {
 		this.cpf = cpf;
 		this.email = email;
 		this.senha = senha;
+		this.dataNascimento = LocalDate.now();
 	}
 
 	public Usuario getClone() {
@@ -72,6 +86,38 @@ public class Usuario implements Cloneable {
 		this.id = id;
 	}
 
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
+	}
+
+	public Sexo getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(Sexo sexo) {
+		this.sexo = sexo;
+	}
+
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	public Telefone getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(Telefone telefone) {
+		this.telefone = telefone;
+	}
+
 	@Override
 	public String toString() {
 		return "Usuario [nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", senha=" + senha + "]";
@@ -93,7 +139,5 @@ public class Usuario implements Cloneable {
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
 
 }
